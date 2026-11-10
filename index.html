@@ -103,15 +103,18 @@ function list(){let a=D.notes.filter(n=>V.f==='trash'?n.del:!n.del);
  if(q)a=a.filter(n=>(n.title+' '+n.body+' '+n.items.map(i=>i.t).join(' ')).toLowerCase().includes(q));
  return a.sort((x,y)=>(y.pin?1:0)-(x.pin?1:0)||y.ts-x.ts)}
 function row(id,name,c,col,del){return '<div class="cell">'+(V.E&&del?'<button class="minus" data-a="delf" data-id="'+id+'" aria-label="Видалити папку">−</button>':'')+'<button class="rw" data-a="open" data-id="'+id+'"><span class="sq" style="background:'+col+'"></span><span class="grow">'+esc(name)+'</span><span class="mut">'+c+'</span></button></div>'}
+function rcard(n){const sn=n.body.trim().slice(0,90)||n.items.map(i=>i.t).join(', ')||'Без тексту',meta=[n.pin?'Закріплено':'',fname(n.folder),tags(n).join(' '),fd(n.ts)].filter(Boolean).join(' · ');return '<div class="card"><button class="nc" data-a="note" data-id="'+n.id+'"><b>'+esc(n.title||'Без назви')+'</b><span>'+esc(sn)+'</span><span>'+esc(meta)+'</span></button></div>'}
 function rHome(){const al=D.notes.filter(x=>!x.del),c=id=>al.filter(x=>x.folder===id).length;
  let h='<div class="top"><h1>Нотатки</h1><div><button class="lnk" data-a="edit">'+(V.E?'Готово':'Змінити')+'</button><button class="ic" data-a="gear" aria-label="Вигляд і копія">⚙︎</button></div></div>';
  h+='<input class="sr" data-i="hq" placeholder="Пошук" aria-label="Пошук">';
  h+='<div class="grp">'+row('all','Усі нотатки',al.length,PAL[0]);
  D.folders.forEach((f,i)=>{h+=row(f.id,f.n,c(f.id),PAL[(i+1)%5],1)});
  h+=row('trash','Нещодавно видалені',D.notes.length-al.length,'#636366')+'</div>';
- h+='<div class="grp"><div class="cell"><input type="text" id="nf" placeholder="Нова папка" aria-label="Нова папка"><button class="plus" data-a="addf" aria-label="Додати папку">+</button></div></div>';
+ h+='<div class="grp"><div class="cell" style="padding:2px 8px 2px 16px"><input type="text" id="nf" placeholder="Нова папка" aria-label="Нова папка"><button class="plus" data-a="addf" aria-label="Додати папку">+</button></div></div>';
  const m={};al.forEach(n=>tags(n).forEach(t=>m[t]=(m[t]||0)+1));const ks=Object.keys(m).sort();
  h+='<div class="gt">Теги</div>'+(ks.length?'<div class="chips">'+ks.map(t=>'<button class="chip" data-a="tag" data-t="'+esc(t)+'">'+esc(t)+' · '+m[t]+'</button>').join('')+'</div>':'<p class="mut" style="margin:0 4px 22px">Теги з’являться, коли напишете #тег у нотатці.</p>');
+ const rc=al.slice().sort((x,y)=>y.ts-x.ts).slice(0,3);
+ if(rc.length)h+='<div class="gt">Нещодавні</div>'+rc.map(rcard).join('');
  if(!al.length)h+='<p class="mut ctr">Поки немає нотаток. Торкніться «+», щоб створити першу.</p>';
  return h}
 function rList(){const t=V.f==='all'?'Усі нотатки':V.f==='trash'?'Нещодавно видалені':fname(V.f);
