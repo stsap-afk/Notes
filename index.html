@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Нотатки</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#E08A00">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Нотатки">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon-192.png">
+<style>
+:root{--bg:#F2F2F7;--card:#fff;--text:#000;--mut:#636366;--line:rgba(60,60,67,.18);--bar:rgba(249,249,249,.88);--seg:rgba(118,118,128,.12);--accent:#0A6FE8;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#000;--card:#1C1C1E;--text:#fff;--mut:#98989F;--line:rgba(84,84,88,.5);--bar:rgba(29,29,31,.88);--seg:rgba(118,118,128,.24);color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#000;--card:#1C1C1E;--text:#fff;--mut:#98989F;--line:rgba(84,84,88,.5);--bar:rgba(29,29,31,.88);--seg:rgba(118,118,128,.24);color-scheme:dark}
+html{background:var(--bg);scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--text);font:17px/1.35 -apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,system-ui,sans-serif;padding-bottom:110px}
+[hidden]{display:none!important}
+main{max-width:560px;margin:0 auto;padding:8px 16px}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0;text-align:left}
+.top{display:flex;align-items:center;justify-content:space-between;min-height:44px}
+.top h1{margin:0;font-size:34px;font-weight:700}
+.h1{margin:4px 4px 12px;font-size:34px;font-weight:700}
+.lnk{color:var(--accent);padding:12px 6px;min-height:44px}.red{color:#D70015}
+.ic{color:var(--accent);font-size:22px;padding:8px;min-width:44px;min-height:44px}
+.sr{width:100%;height:40px;border:0;border-radius:10px;background:var(--seg);color:var(--text);font:inherit;padding:0 12px;margin:6px 0 16px}
+.gt{font-size:13px;color:var(--mut);margin:0 16px 6px}
+.grp{background:var(--card);border-radius:12px;overflow:hidden;margin-bottom:22px}
+.cell{display:flex;align-items:center;gap:12px;padding:0 16px;min-height:48px}
+.cell+.cell{border-top:1px solid var(--line)}
+.rw{flex:1;display:flex;align-items:center;gap:12px;min-height:48px}
+.sq{flex:none;width:28px;height:28px;border-radius:7px}
+.grow{flex:1}.mut{color:var(--mut)}.ctr{text-align:center}
+.minus{position:relative;flex:none;width:32px;height:32px;border-radius:50%;background:#FF3B30;color:#fff;line-height:32px;text-align:center;font-weight:700}
+.minus::after,.chk::after{content:"";position:absolute;inset:-8px}
+.plus{flex:none;width:44px;height:44px;border-radius:50%;background:var(--accent);color:#fff;font-size:26px;line-height:40px;text-align:center}
+.cell input[type=text]{flex:1;min-width:0;border:0;background:none;color:var(--text);font:inherit;outline:0;padding:0;min-height:48px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
+.chip{background:var(--seg);color:var(--accent);border-radius:99px;padding:0 16px;min-height:44px;display:flex;align-items:center;font-size:15px}
+.card{background:var(--card);border-radius:12px;margin-bottom:10px;overflow:hidden}
+.nc{display:block;width:100%;padding:12px 16px;min-height:60px}
+.nc b{display:block;font-size:17px}.nc span{display:block;font-size:15px;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row2{display:flex;border-top:1px solid var(--line)}.row2 .lnk{flex:1;text-align:center}
+.ti{width:100%;border:0;background:none;color:var(--text);font:700 28px/1.2 inherit;font-family:inherit;outline:0;padding:8px 4px}
+.sel{background:var(--seg);color:var(--text);border:0;border-radius:8px;font:inherit;font-size:15px;padding:8px 10px;min-height:40px;margin:0 4px 10px}
+.bd{width:100%;min-height:140px;border:0;background:none;color:var(--text);font:inherit;outline:0;resize:none;padding:4px;margin-bottom:12px}
+.chk{position:relative;flex:none;width:26px;height:26px;border-radius:50%;border:2px solid var(--mut);display:grid;place-items:center;color:#fff;font-size:15px;text-align:center}
+.chk.on{background:var(--accent);border-color:var(--accent)}
+.d input[type=text]{color:var(--mut);text-decoration:line-through}
+.x{color:var(--mut);font-size:22px;min-width:44px;min-height:44px;text-align:center}
+.tb{position:fixed;left:0;right:0;bottom:0;background:var(--bar);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--line);padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--mut);min-height:64px}
+.tb .plus{position:absolute;right:16px;top:10px}
+.seg{display:flex;background:var(--seg);border-radius:9px;padding:2px;margin-bottom:20px}
+.seg button{flex:1;padding:8px 0;border-radius:7px;font-size:15px;text-align:center;min-height:36px}
+.seg .on{background:var(--card);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.big{flex:1;padding:14px;border-radius:14px;background:var(--accent);color:#fff;font-weight:600;text-align:center}
+.big.alt{background:var(--seg);color:var(--text)}
+.btns{display:flex;gap:12px;margin-bottom:20px}
+.sheet{position:fixed;inset:0;background:rgba(0,0,0,.4);display:flex;align-items:flex-end;z-index:20}
+.sb{width:100%;max-width:560px;margin:0 auto;background:var(--bg);border-radius:16px 16px 0 0;padding:20px 16px calc(20px + env(safe-area-inset-bottom,0px))}
+.sb h3{margin:0 0 14px;font-size:20px}
+.sw{display:flex;gap:14px;margin:6px 4px 22px}.sw button{width:36px;height:36px;border-radius:50%}
+.sw .on{box-shadow:0 0 0 3px var(--bg),0 0 0 5px var(--text)}
+.toast{position:fixed;left:16px;right:16px;bottom:calc(80px + env(safe-area-inset-bottom,0px));background:#2C2C2E;color:#fff;border-radius:12px;padding:6px 6px 6px 14px;display:flex;justify-content:space-between;align-items:center;z-index:15}
+#bn{max-width:528px;margin:12px auto 0;padding:12px 14px;border-radius:12px;background:#FFF1C2;color:#4A3500;font-size:15px}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+</head>
+<body>
+<div id="bn" hidden></div>
+<main id="app"></main>
+<div class="tb" id="tb"></div>
+<div class="sheet" id="sheet" hidden><div class="sb" id="sb"></div></div>
+<script>
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const rd=(k,f)=>{try{const r=localStorage.getItem(k);return r?JSON.parse(r):f}catch(e){return f}};
+const wr=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){bn('Не вдалося зберегти запис. Збережіть копію: ⚙︎ → «Зберегти у файл».')}};
+let D=Object.assign({notes:[],folders:[]},rd('notes:data',{}));
+let ST=Object.assign({theme:'auto',accent:'#0A6FE8'},rd('notes:settings',{}));
+if(!ST.firstRun){ST.firstRun=Date.now();wr('notes:settings',ST)}
+const save=()=>wr('notes:data',D),now=()=>Date.now(),PAL=['#0A6FE8','#C25B00','#1E8E3E','#8944C4','#D6336C'];
+D.notes=D.notes.filter(n=>!n.del||now()-n.del<2592e6);
+let V={v:'home',f:'all',tag:'',q:'',id:null,E:false},L='',TO;
+const cur=()=>D.notes.find(n=>n.id===V.id);
+const fname=id=>{const f=D.folders.find(x=>x.id===id);return f?f.n:''};
+const tags=n=>[...new Set(((n.title||'')+' '+(n.body||'')).toLowerCase().match(/#[\p{L}\d_]+/gu)||[])];
+const fd=t=>new Date(t).toLocaleString('uk-UA',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+function applyST(){const r=document.documentElement;ST.theme==='auto'?r.removeAttribute('data-theme'):r.setAttribute('data-theme',ST.theme);r.style.setProperty('--accent',ST.accent)}
+function bn(t,act){const b=$('bn');b.hidden=false;b.textContent=t;b.onclick=act||null;b.style.cursor=act?'pointer':'default'}
+function toast(t,fn){let b=$('toast');if(!b){b=document.createElement('div');b.className='toast';b.id='toast';document.body.append(b)}
+ b.innerHTML='<span>'+esc(t)+'</span>';b.hidden=false;
+ if(fn){const u=document.createElement('button');u.textContent='Скасувати';u.style.cssText='color:#8AB8FF;font-weight:600;padding:12px';u.onclick=()=>{b.hidden=true;fn()};b.append(u)}
+ clearTimeout(TO);TO=setTimeout(()=>{b.hidden=true},6000)}
+function list(){let a=D.notes.filter(n=>V.f==='trash'?n.del:!n.del);
+ if(V.f!=='all'&&V.f!=='trash')a=a.filter(n=>n.folder===V.f);
+ if(V.tag)a=a.filter(n=>tags(n).includes(V.tag));
+ const q=V.q.trim().toLowerCase();
+ if(q)a=a.filter(n=>(n.title+' '+n.body+' '+n.items.map(i=>i.t).join(' ')).toLowerCase().includes(q));
+ return a.sort((x,y)=>(y.pin?1:0)-(x.pin?1:0)||y.ts-x.ts)}
+function row(id,name,c,col,del){return '<div class="cell">'+(V.E&&del?'<button class="minus" data-a="delf" data-id="'+id+'" aria-label="Видалити папку">−</button>':'')+'<button class="rw" data-a="open" data-id="'+id+'"><span class="sq" style="background:'+col+'"></span><span class="grow">'+esc(name)+'</span><span class="mut">'+c+'</span></button></div>'}
+function rHome(){const al=D.notes.filter(x=>!x.del),c=id=>al.filter(x=>x.folder===id).length;
+ let h='<div class="top"><h1>Нотатки</h1><div><button class="lnk" data-a="edit">'+(V.E?'Готово':'Змінити')+'</button><button class="ic" data-a="gear" aria-label="Вигляд і копія">⚙︎</button></div></div>';
+ h+='<input class="sr" data-i="hq" placeholder="Пошук" aria-label="Пошук">';
+ h+='<div class="grp">'+row('all','Усі нотатки',al.length,PAL[0]);
+ D.folders.forEach((f,i)=>{h+=row(f.id,f.n,c(f.id),PAL[(i+1)%5],1)});
+ h+=row('trash','Нещодавно видалені',D.notes.length-al.length,'#636366')+'</div>';
+ h+='<div class="grp"><div class="cell"><input type="text" id="nf" placeholder="Нова папка" aria-label="Нова папка"><button class="plus" data-a="addf" aria-label="Додати папку">+</button></div></div>';
+ const m={};al.forEach(n=>tags(n).forEach(t=>m[t]=(m[t]||0)+1));const ks=Object.keys(m).sort();
+ h+='<div class="gt">Теги</div>'+(ks.length?'<div class="chips">'+ks.map(t=>'<button class="chip" data-a="tag" data-t="'+esc(t)+'">'+esc(t)+' · '+m[t]+'</button>').join('')+'</div>':'<p class="mut" style="margin:0 4px 22px">Теги з’являться, коли напишете #тег у нотатці.</p>');
+ if(!al.length)h+='<p class="mut ctr">Поки немає нотаток. Торкніться «+», щоб створити першу.</p>';
+ return h}
+function rList(){const t=V.f==='all'?'Усі нотатки':V.f==='trash'?'Нещодавно видалені':fname(V.f);
+ let h='<div class="top"><button class="lnk" data-a="home">‹ Папки</button></div><h1 class="h1">'+esc(V.tag||t)+'</h1>';
+ h+='<input class="sr" id="lq" data-i="lq" placeholder="Пошук" aria-label="Пошук" value="'+esc(V.q)+'">';
+ const a=list();
+ if(!a.length)h+='<p class="mut ctr">'+(V.q||V.tag?'Нічого не знайдено.':V.f==='trash'?'Тут порожньо. Видалені нотатки зберігаються 30 днів.':'У цій папці ще немає нотаток. Торкніться «+».')+'</p>';
+ a.forEach(n=>{const sn=n.body.trim().slice(0,90)||n.items.map(i=>i.t).join(', ')||'Без тексту',meta=[n.pin?'Закріплено':'',fname(n.folder),tags(n).join(' '),fd(n.ts)].filter(Boolean).join(' · ');
+  h+='<div class="card"><button class="nc" '+(V.f==='trash'?'':'data-a="note" data-id="'+n.id+'"')+'><b>'+esc(n.title||'Без назви')+'</b><span>'+esc(sn)+'</span><span>'+esc(meta)+'</span></button>'+(V.f==='trash'?'<div class="row2"><button class="lnk" data-a="rest" data-id="'+n.id+'">Відновити</button><button class="lnk red" data-a="purge" data-id="'+n.id+'">Видалити назавжди</button></div>':'')+'</div>'});
+ return h}
+function rEdit(){const n=cur();if(!n){V.v='home';return rHome()}
+ let h='<div class="top"><button class="lnk" data-a="back">‹ Назад</button><div><button class="lnk" data-a="pin">'+(n.pin?'Закріплено':'Закріпити')+'</button><button class="lnk red" data-a="del">Видалити</button></div></div>';
+ h+='<input class="ti" data-i="t" placeholder="Назва" aria-label="Назва" value="'+esc(n.title)+'">';
+ h+='<select class="sel" data-i="fo" aria-label="Папка"><option value="">Без папки</option>'+D.folders.map(f=>'<option value="'+f.id+'"'+(n.folder===f.id?' selected':'')+'>'+esc(f.n)+'</option>').join('')+'</select>';
+ h+='<textarea class="bd" data-i="b" placeholder="Текст нотатки. Теги пишіть так: #ідея" aria-label="Текст">'+esc(n.body)+'</textarea>';
+ h+='<div class="gt">Список</div><div class="grp">';
+ n.items.forEach((it,k)=>{h+='<div class="cell'+(it.d?' d':'')+'"><button class="chk'+(it.d?' on':'')+'" data-a="ck" data-k="'+k+'" aria-label="Виконано">'+(it.d?'✓':'')+'</button><input type="text" data-i="it" data-k="'+k+'" value="'+esc(it.t)+'" aria-label="Пункт"><button class="x" data-a="dk" data-k="'+k+'" aria-label="Видалити пункт">×</button></div>'});
+ h+='<div class="cell"><input type="text" id="ni" placeholder="Новий пункт" aria-label="Новий пункт"><button class="plus" data-a="ai" aria-label="Додати пункт">+</button></div></div>';
+ const tg=tags(n);if(tg.length)h+='<p class="mut" style="margin:0 4px 8px">'+esc(tg.join(' '))+'</p>';
+ return h+'<p class="mut" style="margin:0 4px">Змінено: '+fd(n.ts)+'</p>'}
+function render(){const y=L===V.v?scrollY:0;L=V.v;$('app').innerHTML=({home:rHome,list:rList,edit:rEdit})[V.v]();
+ const tb=$('tb');tb.hidden=V.v==='edit'||V.f==='trash'&&V.v==='list';
+ tb.innerHTML=D.notes.filter(n=>!n.del).length+' нотаток<button class="plus" data-a="new" aria-label="Нова нотатка">+</button>';
+ const b=document.querySelector('.bd');if(b){b.style.height='auto';b.style.height=Math.max(b.scrollHeight,140)+'px'}scrollTo(0,y)}
+function fix(){if(V.v==='edit'){const n=cur();if(n&&!n.title.trim()&&!n.body.trim()&&!n.items.length)D.notes=D.notes.filter(x=>x!==n);save()}}
+const A={
+ edit(){V.E=!V.E;render()},gear(){sheet()},home(){V.v='home';V.q='';V.tag='';render()},
+ open(d){V.f=d.id;V.tag='';V.q='';V.v='list';render()},
+ tag(d){V.tag=d.t;V.f='all';V.q='';V.v='list';render()},
+ addf(){const i=$('nf'),t=i.value.trim();if(!t)return;D.folders.push({id:'f'+now(),n:t});save();render()},
+ delf(d){const f=D.folders.find(x=>x.id===d.id);D.notes.forEach(n=>{if(n.folder===d.id)n.folder=null});D.folders=D.folders.filter(x=>x!==f);save();render();toast('Папку видалено, нотатки збережено в «Усі нотатки»')},
+ new(){const n={id:'n'+now(),title:'',body:'',items:[],folder:D.folders.some(f=>f.id===V.f)?V.f:null,pin:0,ts:now(),del:0};D.notes.push(n);save();V.id=n.id;V.v='edit';render();document.querySelector('.ti').focus()},
+ note(d){V.id=d.id;V.v='edit';render()},
+ back(){fix();V.v=V.f==='all'&&!V.q&&!V.tag?'list':'list';render()},
+ pin(){const n=cur();n.pin=n.pin?0:1;n.ts=now();save();render()},
+ del(){const n=cur();fix();if(!cur()){V.v='list';render();return}n.del=now();save();V.v='list';render();toast('Нотатку видалено',()=>{n.del=0;save();render()})},
+ rest(d){D.notes.find(n=>n.id===d.id).del=0;save();render()},
+ purge(d){if(confirm('Видалити назавжди? Повернути буде неможливо.')){D.notes=D.notes.filter(n=>n.id!==d.id);save();render()}},
+ ck(d){const it=cur().items[d.k];it.d=it.d?0:1;cur().ts=now();save();render()},
+ dk(d){const n=cur();const r=n.items.splice(d.k,1)[0];n.ts=now();save();render();toast('Пункт видалено',()=>{n.items.splice(d.k,0,r);save();render()})},
+ ai(){const i=$('ni'),t=i.value.trim();if(!t)return;const n=cur();n.items.push({t,d:0});n.ts=now();save();render();$('ni').focus()}
+};
+const I={
+ hq(v){V.q=v;V.f='all';V.v='list';render();const q=$('lq');q.focus();q.setSelectionRange(v.length,v.length)},
+ lq(v){V.q=v;const y=scrollY;const a=document.querySelectorAll('.card,.app>p');render();const q=$('lq');q.focus();q.setSelectionRange(v.length,v.length);scrollTo(0,y)},
+ t(v){const n=cur();n.title=v;n.ts=now();save()},b(v){const n=cur();n.body=v;n.ts=now();save()},
+ fo(v){const n=cur();n.folder=v||null;n.ts=now();save()},
+ it(v,e){const n=cur();n.items[e.dataset.k].t=v;n.ts=now();save()}
+};
+document.addEventListener('click',e=>{const t=e.target.closest('[data-a]');if(t&&A[t.dataset.a])A[t.dataset.a](t.dataset)});
+document.addEventListener('input',e=>{const t=e.target,k=t.dataset.i;if(k&&I[k]){I[k](t.value,t);if(k==='b'){t.style.height='auto';t.style.height=Math.max(t.scrollHeight,140)+'px'}}});
+document.addEventListener('change',e=>{if(e.target.dataset.i==='fo')I.fo(e.target.value)});
+document.addEventListener('keydown',e=>{if(e.key!=='Enter')return;if(e.target.id==='ni')A.ai();if(e.target.id==='nf')A.addf()});
+const fi=document.createElement('input');fi.type='file';fi.accept='.json,application/json';fi.hidden=true;document.body.append(fi);
+function exportData(){const o={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.indexOf('notes:')===0)o[k]=localStorage.getItem(k)}
+ const d=new Date(),name='notes-'+d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()+'.json',txt=JSON.stringify(o),done=()=>{ST.lastBackup=now();wr('notes:settings',ST);$('bn').hidden=true};
+ try{const f=new File([txt],name,{type:'application/json'});if(navigator.canShare&&navigator.canShare({files:[f]})){navigator.share({files:[f],title:'Копія нотаток'}).then(done).catch(()=>{});return}}catch(e){}
+ const blob=new Blob([txt],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000);done()}
+fi.onchange=()=>{const f=fi.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const o=JSON.parse(r.result);let n=0;Object.keys(o).forEach(k=>{if(k.indexOf('notes:')===0){localStorage.setItem(k,o[k]);n++}});alert('Відновлено записів: '+n);location.reload()}catch(e){alert('Не вдалося прочитати файл')}};r.readAsText(f);fi.value=''};
+function sheet(){$('sheet').hidden=false;const b=$('sb');b.innerHTML='<h3>Вигляд і копія</h3><div class="seg" id="sg"></div><div class="gt">Колір акценту</div><div class="sw" id="sw"></div><div class="gt">Резервна копія</div><div class="btns"><button class="big alt" id="ex">Зберегти у файл</button><button class="big alt" id="im">Відновити з файлу</button></div><button class="big" id="ok" style="width:100%">Готово</button>';
+ [['auto','Авто'],['light','Світла'],['dark','Темна']].forEach(([k,l])=>{const x=document.createElement('button');x.textContent=l;if(ST.theme===k)x.className='on';x.onclick=()=>{ST.theme=k;wr('notes:settings',ST);applyST();sheet()};$('sg').append(x)});
+ ['#0A6FE8','#30B0A0','#34C759','#FF9F0A','#FF375F','#AF52DE'].forEach(c=>{const x=document.createElement('button');x.style.background=c;x.setAttribute('aria-label',c);if(ST.accent===c)x.className='on';x.onclick=()=>{ST.accent=c;wr('notes:settings',ST);applyST();sheet()};$('sw').append(x)});
+ $('ex').onclick=exportData;$('im').onclick=()=>fi.click();$('ok').onclick=()=>{$('sheet').hidden=true}}
+$('sheet').onclick=e=>{if(e.target.id==='sheet')e.target.hidden=true};
+try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
+if('serviceWorker' in navigator&&location.protocol.indexOf('http')===0){navigator.serviceWorker.register('sw.js').catch(()=>{})}
+applyST();render();
+if(now()-(ST.lastBackup||ST.firstRun)>6048e5)bn('Минув тиждень без резервної копії. Торкніться, щоб зберегти.',sheet);
+</script>
+</body>
+</html>
